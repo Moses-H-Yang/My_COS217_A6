@@ -19,15 +19,40 @@ static void setField(unsigned int uiSrc, unsigned int uiSrcStartBit,
                      unsigned int *puiDest, unsigned int uiDestStartBit,
                      unsigned int uiNumBits)
 {
-   /* Your code here */
+   unsigned int i;
+   i = 0;
+   
+   while (i < uiNumBits) {
 
+      /* create a bitmask for the current bit in uiSrc */
+      unsigned int currentBit;
+      currentBit = 1 << (uiSrcStartBit + i);
+
+      /* if the i'th bit in uiSrc  is set, transfer to *puiDest */
+      if ((uiSrc & currentBit) != 0) {
+         *puiDest |= 1 << (uiDestStartBit + i);
+      }
+      
+      i++;
+   }
+   
 }
 
 /*--------------------------------------------------------------------*/
 
 unsigned int MiniAssembler_mov(unsigned int uiReg, int iImmed)
 {
-   /* Your code here */
+   /* Base instruction code for mov */
+   unsigned int uiInstr;
+   uiInstr = 0x52800000;
+
+   /* Destination register */
+   setField(uiReg, 0, &uiInstr, 0, 5);
+
+   /* Immediate */
+   setField(iImmed, 0, &uiInstr, 5, 16);
+
+   return uiInstr;
 
 }
 
@@ -59,8 +84,17 @@ unsigned int MiniAssembler_adr(unsigned int uiReg, unsigned long ulAddr,
 unsigned int MiniAssembler_strb(unsigned int uiFromReg,
    unsigned int uiToReg)
 {
-   /* Your code here */
+   /* Base instructions code for strb */
+   unsigned int uiInstr;
+   uiInstr = 0x39000000;
 
+   /* Source register */
+   setField(uiFromReg, 0, &uiInstr, 0, 5);
+
+   /* Destination register */
+   setField(uiToReg, 0, &uiInstr, 5, 5);  
+
+   return uiInstr;
 }
 
 /*--------------------------------------------------------------------*/
@@ -68,6 +102,16 @@ unsigned int MiniAssembler_strb(unsigned int uiFromReg,
 unsigned int MiniAssembler_b(unsigned long ulAddr,
    unsigned long ulAddrOfThisInstr)
 {
-   /* Your code here */
+   unsigned long ulDisp;
+   /* Base instruction code for b */
+   unsigned int uiInstr;
+   uiInstr = 0x14000000;
 
+   /* Calculate displacement */
+   ulDisp = (ulAddr - ulAddrOfThisInstr) >> 2;
+
+   setField((unsigned int) ulDisp, 0, &uiInstr, 0, 26);
+
+   return uiInstr;
+  
 }
