@@ -11,7 +11,8 @@
  #include <stdlib.h>
  #include "miniassembler.h"
 
- int main(void) {
+/* Start of main, returns 0 */
+int main(void) {
     int i;
     unsigned int uiInstr;
 
@@ -41,22 +42,22 @@
     }
     /* mov x0, "A" */
     uiInstr = MiniAssembler_mov(0, 'A');
-    fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
+    (void) fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
 
     /* adr x1, 0x420044 (address of grade = "D") */
     uiInstr = MiniAssembler_adr(1, gradeAddress, bssAdrStart);
-    fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
+    (void) fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
 
     /* strb x0, [x1] */
     uiInstr = MiniAssembler_strb(0, 1);
-    fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
+    (void) fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
 
     /* b to printf("%c is your grade.\n)", grade */
     uiInstr = MiniAssembler_b(skipToPrintf, bssBstart);
-    fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
+    (void) fwrite(&uiInstr, sizeof(unsigned int), 1, psFile);
 
     /* Overrwriting x30 with the address to the bss section to get an A */
-    fwrite(&returnAddress, sizeof(unsigned int), 1, psFile);
+    (void) fwrite(&returnAddress, sizeof(unsigned int), 1, psFile);
 
     /* Close file */
     fclose(psFile);

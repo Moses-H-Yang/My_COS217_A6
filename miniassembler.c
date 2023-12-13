@@ -26,11 +26,11 @@ static void setField(unsigned int uiSrc, unsigned int uiSrcStartBit,
 
       /* create a bitmask for the current bit in uiSrc */
       unsigned int currentBit;
-      currentBit = 1 << (uiSrcStartBit + i);
+      currentBit = (unsigned int) (1 << (uiSrcStartBit + i));
 
       /* if the i'th bit in uiSrc  is set, transfer to *puiDest */
       if ((uiSrc & currentBit) != 0) {
-         *puiDest |= 1 << (uiDestStartBit + i);
+         *puiDest |= (unsigned int) (1 << (uiDestStartBit + i));
       }
       
       i++;
@@ -50,7 +50,7 @@ unsigned int MiniAssembler_mov(unsigned int uiReg, int iImmed)
    setField(uiReg, 0, &uiInstr, 0, 5);
 
    /* Immediate */
-   setField(iImmed, 0, &uiInstr, 5, 16);
+   setField((unsigned int) iImmed, 0, &uiInstr, 5, 16);
 
    return uiInstr;
 
@@ -114,4 +114,21 @@ unsigned int MiniAssembler_b(unsigned long ulAddr,
 
    return uiInstr;
   
+}
+
+/*--------------------------------------------------------------------*/
+
+unsigned int MiniAssembler_bl(unsigned long ulAddr,
+                              unsigned long ulAddrOfThisInstr)
+{
+   unsigned long ulDisp;
+   /* Base instruction code for bl */
+   unsigned int uiInstr;
+   uiInstr = 0x94000000;
+
+   ulDisp = (ulAddr - ulAddrOfThisInstr) >> 2;
+
+   setField((unsigned int) ulDisp, 0, &uiInstr, 0, 26);
+   
+   return uiInstr;
 }

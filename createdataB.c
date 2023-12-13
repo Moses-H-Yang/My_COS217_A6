@@ -39,7 +39,7 @@
     }
     /* Instead of going back to the if statement, go to grade = "B" 
        to change the grade from D to B                            */
-    fwrite(&returnAddress, sizeof(unsigned int), 1, psFile);
+    (void) fwrite(&returnAddress, sizeof(unsigned int), 1, psFile);
     
     /* Close file */
     fclose(psFile);
