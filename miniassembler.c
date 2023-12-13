@@ -1,6 +1,6 @@
 /*--------------------------------------------------------------------*/
 /* miniassembler.c                                                    */
-/* Author: Bob Dondero, Donna Gabai                                   */
+/* Author: Moses Yang & Nicholas Nguyen                               */
 /*--------------------------------------------------------------------*/
 
 #include "miniassembler.h"
